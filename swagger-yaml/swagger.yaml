@@ -1,0 +1,80 @@
+---
+swagger: "2.0"
+info:
+  description: "A chat RPC demo API"
+  version: "1.0.0"
+  title: "Chat RPC demo"
+host: "virtserver.swaggerhub.com"
+basePath: "/bgonza2017/chatrpc/1.0.0"
+schemes:
+- "https"
+paths:
+  /lobby:
+    get:
+      description: "get user list"
+      operationId: "getLobbyUserList"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "lobby join response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/NewUser"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+    post:
+      description: "lobby"
+      operationId: "join"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "add user to lobby"
+        required: true
+        schema:
+          $ref: "#/definitions/NewUser"
+      responses:
+        200:
+          description: "lobby join response"
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+definitions:
+  User:
+    allOf:
+    - $ref: "#/definitions/NewUser"
+    - required:
+      - "id"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+  NewUser:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+      tag:
+        type: "string"
+  ErrorModel:
+    type: "object"
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
